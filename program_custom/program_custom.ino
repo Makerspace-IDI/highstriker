@@ -44,7 +44,11 @@ void loop() {
   //Serial.print("\n"); // make next print appear on new line
 
   //Call the Update strip function
-  eq();
+  //delay(20);
+  striker();
+  delay(1000);
+  stripClear();
+  delay(400);
 }
 
 // Helping functions
@@ -71,9 +75,41 @@ void eq() {
        
       }
       strip.show();
+  }
+
+void striker(){
+
+    if(mic_reading <= 100){
+        colorStrip(1);
+    }
+    else if(mic_reading >100 && mic_reading <= 400){
+      colorStrip(2);  
+    }
+    else if(mic_reading >400 && mic_reading < 600){
+      colorStrip(3);
+    }
+    else if(mic_reading >600 && mic_reading <= 800){
+      colorStrip(4);  
+    }
+    else if(mic_reading >800 && mic_reading <= 1024){
+      colorStrip(5);  
+    }
+    delay(500);
     
-   
-    
+}
+
+void colorStrip(int pixels){
+  for(int i = 0; i < pixels; i++){
+    strip.setPixelColor(i, 255, 10, 10);
+    strip.show();
+  }
+}
+
+void stripClear(){
+    for(int i = 0; i < N_PIXELS; i++){
+    strip.setPixelColor(i, 0);
+    strip.show();
+  }
   }
 
 
