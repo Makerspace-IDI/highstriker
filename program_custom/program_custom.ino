@@ -15,6 +15,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_PIXELS, LED_PIN, NEO_GRB + NEO_KHZ
 int mic_reading = 0; // declare global mic_reading variable.
 
 void setup() {
+  analogReference(EXTERNAL);
   Serial.begin(9600);
   strip.begin(); //start strip
   strip.show(); // update strip
@@ -46,9 +47,9 @@ void loop() {
   //Call the Update strip function
   //delay(20);
   striker();
-  delay(1000);
+  //delay(1000);
   stripClear();
-  delay(400);
+  delay(10);
 }
 
 // Helping functions
@@ -94,7 +95,7 @@ void striker(){
     else if(mic_reading >800 && mic_reading <= 1024){
       colorStrip(5);  
     }
-    delay(500);
+    delay(10);
     
 }
 

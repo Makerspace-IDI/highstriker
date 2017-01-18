@@ -6,21 +6,18 @@ Connections:
  - Digital pin to LED data input (configurable below)
  See notes in setup() regarding 5V vs. 3.3V boards - there may be an
  extra connection to make and one line of code to enable or disable.
-
-Written by Adafruit Industries.  Distributed under the BSD license.
-This paragraph must be included in any redistribution.
 */
 
 #include <Adafruit_NeoPixel.h>
 
 #define N_PIXELS  6  // Number of pixels in strand
-#define MIC_PIN   10  // Microphone is attached to this analog pin
+#define MIC_PIN   A0  // Microphone is attached to this analog pin
 #define LED_PIN    6  // NeoPixel LED strand is connected to this pin
 #define DC_OFFSET  0  // DC offset in mic signal - if unusure, leave 0
 #define NOISE     10  // Noise/hum/interference in mic signal
 #define SAMPLES   60  // Length of buffer for dynamic level adjustment
-#define TOP       (N_PIXELS + 2) // Allow dot to go slightly off scale
-#define PEAK_FALL 4  // Rate of peak falling dot
+#define TOP       (N_PIXELS) // Allow dot to go slightly off scale
+
 
 byte
   peak      = 0,      // Used for falling dot
@@ -36,10 +33,7 @@ Adafruit_NeoPixel
 
 void setup() {
 
-  // This is only needed on 5V Arduinos (Uno, Leonardo, etc.).
-  // Connect 3.3V to mic AND TO AREF ON ARDUINO and enable this
-  // line.  Audio samples are 'cleaner' at 3.3V.
-  // COMMENT OUT THIS LINE FOR 3.3V ARDUINOS (FLORA, ETC.):
+  
   analogReference(EXTERNAL);
 
   memset(vol, 0, sizeof(vol));
@@ -54,40 +48,44 @@ void loop() {
  
 
   n   = analogRead(MIC_PIN);
+  Serial.print("Mic reading: ");
   Serial.println(n);
   n   = abs(n - 512 - DC_OFFSET); // Center on zero
   n   = (n <= NOISE) ? 0 : (n - NOISE);             // Remove noise/hum
   lvl = ((lvl * 7) + n) >> 3;    // "Dampened" reading (else looks twitchy)
-  //Serial.println(lvl);
+  Serial.print("Lvl: ");
+  Serial.println(lvl);
   // Calculate bar height based on dynamic min/max levels (fixed point):
-  height = TOP * (lvl - minLvlAvg) / (long)(maxLvlAvg - minLvlAvg);
-
+  height = TOP * (lvl - minLvlAvg) / (long)(maxLvlAvg - minLvlAvg); // gives number of pixels to color
+  Serial.print("height: ");
+  Serial.println(height);
+  
   if(height < 0L)       height = 0;      // Clip output
   else if(height > TOP) height = TOP;
   if(height > peak)     peak   = height; // Keep 'peak' dot at top
 
 
   // Color pixels based on rainbow gradient
+  // Specify Striker points and response, set tresholds on variable: lvl, (bounces between: 0 --> 484  )
   for(i=0; i<N_PIXELS; i++) {
-    if(i >= height)               strip.setPixelColor(i,   0,   0, 0);
-    else strip.setPixelColor(i,Wheel(map(i,0,strip.numPixels()-1,30,150)));
+    if(i >= height) {
+      strip.setPixelColor(i,   0,   0, 0);
+    }              
+    else if(height == 0){
+      break;
+    }
+    else if(height >0 && height < 3)
+    else{ 
+      strip.setPixelColor(i,Wheel(map(i,0,strip.numPixels()-1,30,150)));
+    }
     
   }
 
 
 
-  // Draw peak dot  
-  if(peak > 0 && peak <= N_PIXELS-1) strip.setPixelColor(peak,Wheel(map(peak,0,strip.numPixels()-1,30,150)));
   
    strip.show(); // Update strip
 
-// Every few frames, make the peak pixel drop by 1:
-
-    if(++dotCount >= PEAK_FALL) { //fall rate 
-      
-      if(peak > 0) peak--;
-      dotCount = 0;
-    }
 
 
 
@@ -124,4 +122,11 @@ uint32_t Wheel(byte WheelPos) {
    WheelPos -= 170;
    return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
   }
+}
+
+
+void colorStrip(int pixels){
+  if(i >= height) {
+      strip.setPixelColor(i,   0,   0, 0);
+    }
 }
