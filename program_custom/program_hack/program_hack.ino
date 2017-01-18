@@ -67,24 +67,31 @@ void loop() {
 
   // Color pixels based on rainbow gradient
   // Specify Striker points and response, set tresholds on variable: lvl, (bounces between: 0 --> 484  )
-  for(i=0; i<N_PIXELS; i++) {
-    if(i >= height) {
-      strip.setPixelColor(i,   0,   0, 0);
-    }              
-    else if(height == 0){
-      break;
-    }
-    else if(height >0 && height < 3)
-    else{ 
-      strip.setPixelColor(i,Wheel(map(i,0,strip.numPixels()-1,30,150)));
-    }
-    
+  if(lvl == 0){
+    colorStrip(0);
   }
-
+  else if(lvl >=1 && lvl < 50){
+    colorStrip(1);
+  }  
+  else if(lvl >=50 &&  lvl< 100){
+    colorStrip(2);
+  }
+  else if(lvl >=100 && lvl < 200){
+    colorStrip(3);
+  } 
+  else if(lvl >=200 && lvl < 350){
+    colorStrip(4);
+  } 
+  else if(lvl >=350 && lvl < 400){
+    colorStrip(5);
+  } 
+  else{
+    colorStrip(6);
+  }  
 
 
   
-   strip.show(); // Update strip
+ //strip.show(); // Update strip
 
 
 
@@ -125,8 +132,17 @@ uint32_t Wheel(byte WheelPos) {
 }
 
 
-void colorStrip(int pixels){
-  if(i >= height) {
+void colorStrip(int height){
+  for(int i=0; i<N_PIXELS; i++) {
+  
+    if(i >= height) {
       strip.setPixelColor(i,   0,   0, 0);
     }
+    else{ 
+      strip.setPixelColor(i,Wheel(map(i,0,strip.numPixels()-1,30,150)));
+    }
+    
+  }
+
+  strip.show();
 }
