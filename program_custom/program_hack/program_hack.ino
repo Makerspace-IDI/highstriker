@@ -12,7 +12,7 @@ Connections:
 
 #define N_PIXELS  6  // Number of pixels in strand
 #define MIC_PIN   A0  // Microphone is attached to this analog pin
-#define LED_PIN    6  // NeoPixel LED strand is connected to this pin
+#define LED_PIN    5  // NeoPixel LED strand is connected to this pin
 #define DC_OFFSET  0  // DC offset in mic signal - if unusure, leave 0
 #define NOISE     10  // Noise/hum/interference in mic signal
 #define SAMPLES   60  // Length of buffer for dynamic level adjustment
@@ -70,19 +70,19 @@ void loop() {
   if(lvl == 0){
     colorStrip(0);
   }
-  else if(lvl >=1 && lvl < 50){
+  else if(lvl >=1 && lvl < 500){
     colorStrip(1);
   }  
-  else if(lvl >=50 &&  lvl< 100){
+  else if(lvl >=50 &&  lvl< 700){
     colorStrip(2);
   }
-  else if(lvl >=100 && lvl < 200){
+  else if(lvl >=100 && lvl < 800){
     colorStrip(3);
   } 
-  else if(lvl >=200 && lvl < 350){
+  else if(lvl >=200 && lvl < 900){
     colorStrip(4);
   } 
-  else if(lvl >=350 && lvl < 400){
+  else if(lvl >=350 && lvl < 1024){
     colorStrip(5);
   } 
   else{
