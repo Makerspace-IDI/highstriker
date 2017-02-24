@@ -12,7 +12,7 @@ Connections:
 
 #define N_PIXELS  6  // Number of pixels in strand
 #define MIC_PIN   A0  // Microphone is attached to this analog pin
-#define LED_PIN    5  // NeoPixel LED strand is connected to this pin
+#define LED_PIN    6  // NeoPixel LED strand is connected to this pin
 #define DC_OFFSET  0  // DC offset in mic signal - if unusure, leave 0
 #define NOISE     10  // Noise/hum/interference in mic signal
 #define SAMPLES   60  // Length of buffer for dynamic level adjustment
